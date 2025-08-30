@@ -5,6 +5,10 @@
 crash.log
 *.tfplan
 
+# Environments
+.env
+env
+
 # Local directories
 .terraform/
 .terraform.lock.hcl
