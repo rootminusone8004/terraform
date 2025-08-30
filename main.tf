@@ -1,5 +1,5 @@
 resource "aws_vpc" "mtc_vpc" {
-  cidr_block = "10.123.0.0/16"
+  cidr_block = var.cidr_block
 
   tags = {
     Name = "dev"
@@ -8,7 +8,7 @@ resource "aws_vpc" "mtc_vpc" {
 
 resource "aws_subnet" "mtc_public_subnet" {
   vpc_id                  = aws_vpc.mtc_vpc.id
-  cidr_block              = "10.123.1.0/24"
+  cidr_block              = var.subnet_ip
   map_public_ip_on_launch = true
   availability_zone       = "us-east-1a"
 
@@ -70,18 +70,30 @@ resource "aws_key_pair" "mtc_auth" {
 }
 
 resource "aws_instance" "dev_node" {
-  instance_type          = "t2.micro"
-  ami                    = data.aws_ami.server_ami.id
+  instance_type = var.ec2_type
+  ami = lookup({
+    "ubuntu" = data.aws_ami.ubuntu_ami.id,
+    "debian" = data.aws_ami.debian_ami.id
+  }, var.distro, data.aws_ami.debian_ami.id)
   key_name               = aws_key_pair.mtc_auth.key_name
   vpc_security_group_ids = [aws_security_group.mtc_sg.id]
   subnet_id              = aws_subnet.mtc_public_subnet.id
 
   root_block_device {
-    volume_size = 10
+    volume_size = var.volume_size
   }
 
   tags = {
     Name = "dev-node"
+  }
+
+  provisioner "local-exec" {
+    command = templatefile("linux-ssh-config.tpl", {
+      hostname     = self.public_ip
+      user         = lookup(var.user_map, var.distro, "admin")
+      identityFile = "~/.ssh/ansible"
+    })
+    interpreter = ["bash", "-c"]
   }
 }
 
