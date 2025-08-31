@@ -3,19 +3,12 @@ variable "distro" {
   default = "debian"
 }
 
-variable "distro_map" {
-  type = map(string)
-  default = {
-    debian = "data.aws_ami.debian_ami.id"
-    ubuntu = "data.aws_ami.ubuntu_ami.id"
-  }
-}
-
 variable "user_map" {
   type = map(string)
   default = {
     debian = "admin"
     ubuntu = "ubuntu"
+    redhat = "ec2-user"
   }
 }
 
