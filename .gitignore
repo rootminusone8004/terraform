@@ -8,6 +8,7 @@ crash.log
 # Environments
 .env
 env
+*.bak
 
 # Local directories
 .terraform/
