@@ -1,8 +1,0 @@
-* Terraform
-
-This is the repository where I keep my terraform scripts.
-
-** License
-
-This repository is licensed under *MIT License*. See [[file:LICENSE.txt][LICENSE.txt]] for details.
-
