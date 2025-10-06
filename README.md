@@ -34,7 +34,7 @@ terraform init
 
 Update the `terraform.tfvars` or create a new one:
 
-``` json
+``` bash
 ec2_type = "t2.medium"
 ```
 
