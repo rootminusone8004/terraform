@@ -8,6 +8,26 @@ data "aws_ami" "debian_ami" {
   }
 }
 
+data "aws_ami" "kali_ami" {
+  most_recent = true
+  owners      = ["679593333241"]
+
+  filter {
+    name   = "name"
+    values = ["debian-kali-*"]
+  }
+
+  filter {
+    name   = "image-id"
+    values = ["ami-003fa928ba1faa587"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+}
+
 data "aws_ami" "ubuntu_ami" {
   most_recent = true
   owners      = ["099720109477"]

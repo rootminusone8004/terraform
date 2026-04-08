@@ -73,9 +73,10 @@ resource "aws_instance" "dev_node" {
   instance_type = var.ec2_type
   ami = lookup({
     "ubuntu" = data.aws_ami.ubuntu_ami.id,
+    "kali" = data.aws_ami.kali_ami.id,
     "debian" = data.aws_ami.debian_ami.id,
     "redhat" = data.aws_ami.redhat_ami.id
-  }, var.distro, data.aws_ami.debian_ami.id)
+  }, var.distro, data.aws_ami.kali_ami.id)
   key_name               = aws_key_pair.mtc_auth.key_name
   vpc_security_group_ids = [aws_security_group.mtc_sg.id]
   subnet_id              = aws_subnet.mtc_public_subnet.id

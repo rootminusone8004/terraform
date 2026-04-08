@@ -1,6 +1,6 @@
 variable "distro" {
   type    = string
-  default = "debian"
+  default = "kali"
 }
 
 variable "user_map" {
@@ -9,6 +9,7 @@ variable "user_map" {
     debian = "admin"
     ubuntu = "ubuntu"
     redhat = "ec2-user"
+    kali = "admin"
   }
 }
 
