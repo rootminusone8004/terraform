@@ -9,7 +9,7 @@ variable "user_map" {
     debian = "admin"
     ubuntu = "ubuntu"
     redhat = "ec2-user"
-    kali = "admin"
+    kali = "kali"
   }
 }
 
