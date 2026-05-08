@@ -3,6 +3,8 @@ cat << EOF >> ~/.ssh/config
 Host ${hostname}
   Hostname ${hostname}
   User ${user}
+  ForwardX11 yes
+  ForwardX11Trusted yes
   IdentityFile ${identityFile}
 EOF
 
