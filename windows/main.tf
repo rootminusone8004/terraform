@@ -59,6 +59,22 @@ resource "aws_security_group" "mtc_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingress {
+    description = "WinRM HTTPS"
+    from_port   = 5985
+    to_port     = 5985
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "WinRM HTTPS"
+    from_port   = 2201
+    to_port     = 2210
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   # Allow Windows outbound Internet access.
   egress {
     from_port   = 0
