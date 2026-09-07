@@ -1,0 +1,14 @@
+region                 = "us-east-1"
+availability_zone      = "us-east-1a"
+distro                 = "debian"
+controller_type        = "t2.medium"
+ec2_type               = "t2.medium"
+worker_count           = 2
+controller_volume_size = 40
+worker_volume_size     = 30
+cidr_block             = "10.123.0.0/16"
+subnet_ip              = "10.123.1.0/24"
+public_key_path        = "~/.ssh/ansible.pub"
+private_key_path       = "~/.ssh/ansible"
+# allowed_admin_cidr     = "203.0.113.10/32" # Optional override; defaults to current public IP
+# allowed_nodeport_cidr  = "203.0.113.10/32" # Optional override; defaults to allowed_admin_cidr

@@ -1,0 +1,7 @@
+region          = "ams"
+plan            = "vc2-1c-1gb"
+hostname        = "openbsd-server"
+os_id           = 2772
+username        = "admin"
+ssh_public_key  = "~/.ssh/ansible.pub"
+ssh_private_key = "~/.ssh/ansible"
