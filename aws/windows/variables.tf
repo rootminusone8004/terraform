@@ -40,16 +40,10 @@ variable "admin_password" {
   sensitive   = true
 }
 
-variable "allowed_admin_cidr" {
-  description = "CIDR block allowed for administrative access (RDP and WinRM). If empty, automatically detects current public IP."
+variable "allowed_cidr" {
+  description = "CIDR block allowed for RDP and WinRM access"
   type        = string
-  default     = ""
-}
-
-variable "allowed_rdp_cidr" {
-  description = "Deprecated: Use allowed_admin_cidr instead. CIDR block allowed to connect via RDP."
-  type        = string
-  default     = ""
+  default     = "0.0.0.0/0"
 }
 
 variable "public_key_path" {

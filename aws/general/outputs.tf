@@ -23,7 +23,7 @@ output "subnet_id" {
   value       = module.vpc.subnet_id
 }
 
-output "allowed_ssh_cidr" {
-  description = "CIDR block currently authorized for SSH access"
-  value       = local.admin_cidr
+output "allowed_cidr" {
+  description = "CIDR block authorized for inbound traffic"
+  value       = var.allowed_cidr
 }

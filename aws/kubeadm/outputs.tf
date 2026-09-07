@@ -38,7 +38,7 @@ output "subnet_id" {
   value       = module.vpc.subnet_id
 }
 
-output "allowed_admin_cidr" {
-  description = "CIDR block authorized for SSH and K8s API access"
-  value       = local.admin_cidr
+output "allowed_cidr" {
+  description = "CIDR block authorized for inbound traffic"
+  value       = var.allowed_cidr
 }

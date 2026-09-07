@@ -17,7 +17,6 @@ locals {
     </powershell>
   EOF
 
-  admin_cidr = var.allowed_admin_cidr != "" ? var.allowed_admin_cidr : (var.allowed_rdp_cidr != "" ? var.allowed_rdp_cidr : "${chomp(data.http.my_ip.response_body)}/32")
 }
 
 module "vpc" {
@@ -33,37 +32,30 @@ module "security_group" {
   source = "../../modules/aws/security_group"
 
   name        = "dev_windows_sg"
-  description = "Windows Server security group with restricted management access"
+  description = "Windows Server security group"
   vpc_id      = module.vpc.vpc_id
 
   ingress_rules = [
     {
-      description = "RDP from authorized admin IP"
+      description = "RDP access"
       from_port   = 3389
       to_port     = 3389
       protocol    = "tcp"
-      cidr_blocks = [local.admin_cidr]
+      cidr_blocks = [var.allowed_cidr]
     },
     {
-      description = "WinRM HTTP from authorized admin IP"
+      description = "WinRM HTTP"
       from_port   = 5985
       to_port     = 5985
       protocol    = "tcp"
-      cidr_blocks = [local.admin_cidr]
+      cidr_blocks = [var.allowed_cidr]
     },
     {
-      description = "WinRM HTTPS from authorized admin IP"
-      from_port   = 5986
-      to_port     = 5986
-      protocol    = "tcp"
-      cidr_blocks = [local.admin_cidr]
-    },
-    {
-      description = "WinRM custom range from authorized admin IP"
+      description = "WinRM HTTPS"
       from_port   = 2201
       to_port     = 2210
       protocol    = "tcp"
-      cidr_blocks = [local.admin_cidr]
+      cidr_blocks = [var.allowed_cidr]
     }
   ]
 

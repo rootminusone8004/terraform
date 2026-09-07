@@ -4,10 +4,8 @@ locals {
     ubuntu = data.aws_ami.ubuntu_ami.id
     redhat = data.aws_ami.redhat_ami.id
   }
-  selected_ami  = lookup(local.ami_map, var.distro, data.aws_ami.debian_ami.id)
-  ssh_user      = lookup(var.user_map, var.distro, "admin")
-  admin_cidr    = var.allowed_admin_cidr != "" ? var.allowed_admin_cidr : "${chomp(data.http.my_ip.response_body)}/32"
-  nodeport_cidr = var.allowed_nodeport_cidr != "" ? var.allowed_nodeport_cidr : local.admin_cidr
+  selected_ami = lookup(local.ami_map, var.distro, data.aws_ami.debian_ami.id)
+  ssh_user     = lookup(var.user_map, var.distro, "admin")
 }
 
 module "vpc" {
@@ -23,47 +21,16 @@ module "security_group" {
   source = "../../modules/aws/security_group"
 
   name        = "kubeadm_sg"
-  description = "Security group for Kubernetes cluster nodes with least privilege ingress"
+  description = "Security group for Kubernetes cluster nodes"
   vpc_id      = module.vpc.vpc_id
 
   ingress_rules = [
-    # 1. Intra-cluster communication (all cluster nodes communicate freely with each other)
     {
-      description = "Allow all internal traffic within the cluster security group"
+      description = "Allow all inbound traffic"
       from_port   = 0
       to_port     = 0
       protocol    = "-1"
-      self        = true
-    },
-    {
-      description = "Allow all internal traffic across VPC subnet"
-      from_port   = 0
-      to_port     = 0
-      protocol    = "-1"
-      cidr_blocks = [var.subnet_ip]
-    },
-    # 2. Administrative access (SSH and Kubernetes API) restricted to admin IP
-    {
-      description = "SSH from authorized admin IP"
-      from_port   = 22
-      to_port     = 22
-      protocol    = "tcp"
-      cidr_blocks = [local.admin_cidr]
-    },
-    {
-      description = "Kubernetes API server from authorized admin IP"
-      from_port   = 6443
-      to_port     = 6443
-      protocol    = "tcp"
-      cidr_blocks = [local.admin_cidr]
-    },
-    # 3. NodePort services restricted to authorized IP / CIDR
-    {
-      description = "Kubernetes NodePort services from authorized IP"
-      from_port   = 30000
-      to_port     = 32767
-      protocol    = "tcp"
-      cidr_blocks = [local.nodeport_cidr]
+      cidr_blocks = [var.allowed_cidr]
     }
   ]
 
@@ -76,6 +43,10 @@ module "security_group" {
       cidr_blocks = ["0.0.0.0/0"]
     }
   ]
+
+  tags = {
+    Name = "kubeadm-sg"
+  }
 }
 
 module "key_pair" {

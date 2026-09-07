@@ -63,8 +63,8 @@ variable "private_key_path" {
   default     = "~/.ssh/ansible"
 }
 
-variable "allowed_ssh_cidr" {
-  description = "CIDR block allowed to connect via SSH. If empty, automatically detects current public IP."
+variable "allowed_cidr" {
+  description = "CIDR block allowed for inbound traffic"
   type        = string
-  default     = ""
+  default     = "0.0.0.0/0"
 }

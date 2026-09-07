@@ -134,27 +134,29 @@ Provisions a Debian Linux server on Vultr with automated hardening.
 
 ---
 
-## 🛡️ Network Security & Ingress/Egress Hardening
+## 🌐 Network Access & Ingress Configuration
 
-Previously, security groups allowed unrestricted inbound access (`0.0.0.0/0` on all ports). This has been upgraded to industry-standard **least-privilege ingress** while maintaining complete functionality:
+By default, the AWS stacks are configured for **flexible multi-network student/lab access** (`allowed_cidr = "0.0.0.0/0"`):
 
-1. **Auto-Detected Admin Access**:
-   - Workstation public IPs are automatically detected via `https://checkip.amazonaws.com` during `plan` and `apply`.
-   - Ingress for management services (SSH on port 22, RDP on port 3389, WinRM on ports 5985/5986, and Kubernetes API on port 6443) is **strictly restricted to your IP**.
-   - Can be overridden anytime via `allowed_admin_cidr` or `allowed_ssh_cidr` in `terraform.tfvars`.
-2. **Intra-Cluster Kubernetes Security**:
-   - Kubernetes cluster nodes communicate freely with each other via security group self-reference (`self = true`) and subnet CIDR.
-   - Critical cluster services (etcd `2379-2380`, Kubelet `10250`, controller `10257`, scheduler `10259`) are **never exposed to the public internet**.
-   - NodePort ranges (`30000-32767`) are restricted to authorized admin IPs by default and can be configured independently via `allowed_nodeport_cidr`.
+1. **Student & Mobile Device Access**:
+   - Students connecting from mobile networks, dynamic hotspots, home broadband, or campus Wi-Fi can connect without being blocked by IP whitelists.
+   - **AWS General (`aws/general`)**: Allows all inbound traffic so students can SSH in and access student web applications/services running on custom ports (e.g., 3000, 5000, 8080).
+   - **AWS Kubernetes (`aws/kubeadm`)**: Allows all inbound traffic for multi-node cluster communication, remote `kubectl` access (port 6443), and NodePort services (30000–32767).
+   - **AWS Windows (`aws/windows`)**: Allows RDP (port 3389) and WinRM (ports 5985, 2201–2210) from any network.
+2. **Optional CIDR Lockdown**:
+   - If you ever need to restrict access to a private VPN or specific subnet, simply define `allowed_cidr` in `terraform.tfvars`:
+     ```hcl
+     allowed_cidr = "203.0.113.0/24"
+     ```
 3. **Outbound Internet Access (Egress `0.0.0.0/0`)**:
-   - Full outbound internet access is preserved across all instances to allow package managers (`apt`, `dnf`), container image registries, PowerShell gallery, and Windows updates to function normally.
+   - Outbound internet access is enabled across all instances so package managers (`apt`, `dnf`), container image registries, and updates download without restrictions.
 
 ---
 
 ## 📚 Best Practices Followed
 
 - **Strict Modular Design:** No repeated networking or instance boilerplate; shared logic lives in `modules/`.
-- **Least-Privilege Security:** Ingress is strictly locked down to authorized admin IPs and internal VPC/SG traffic.
+- **Configurable Access Control:** Ingress CIDRs are parameterized via `allowed_cidr` with sensible defaults.
 - **Consistent File Standards:** Every module and environment stack contains standard `main.tf`, `variables.tf`, `outputs.tf`, `providers.tf`/`versions.tf`, and `terraform.tfvars.example`.
 - **Security by Default:** Sensitive variables (like passwords) are marked `sensitive = true`, state files are gitignored, and provider credentials rely on external credential stores.
 - **Safe Path Resolution:** File paths utilize `pathexpand()` to handle `~` correctly across different shells and systems.

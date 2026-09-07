@@ -7,7 +7,6 @@ locals {
   }
   selected_ami = lookup(local.ami_map, var.distro, data.aws_ami.kali_ami.id)
   ssh_user     = lookup(var.user_map, var.distro, "admin")
-  admin_cidr   = var.allowed_ssh_cidr != "" ? var.allowed_ssh_cidr : "${chomp(data.http.my_ip.response_body)}/32"
 }
 
 module "vpc" {
@@ -23,23 +22,16 @@ module "security_group" {
   source = "../../modules/aws/security_group"
 
   name        = "dev_sg"
-  description = "Security group for dev node with restricted ingress"
+  description = "Security group for general dev node"
   vpc_id      = module.vpc.vpc_id
 
   ingress_rules = [
     {
-      description = "SSH from authorized admin IP"
-      from_port   = 22
-      to_port     = 22
-      protocol    = "tcp"
-      cidr_blocks = [local.admin_cidr]
-    },
-    {
-      description = "ICMP echo (ping) from authorized admin IP"
-      from_port   = 8
+      description = "Allow all inbound traffic"
+      from_port   = 0
       to_port     = 0
-      protocol    = "icmp"
-      cidr_blocks = [local.admin_cidr]
+      protocol    = "-1"
+      cidr_blocks = [var.allowed_cidr]
     }
   ]
 

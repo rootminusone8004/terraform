@@ -80,14 +80,8 @@ variable "private_key_path" {
   default     = "~/.ssh/ansible"
 }
 
-variable "allowed_admin_cidr" {
-  description = "CIDR block allowed for administrative access (SSH and Kubernetes API). If empty, automatically detects current public IP."
+variable "allowed_cidr" {
+  description = "CIDR block allowed for inbound traffic"
   type        = string
-  default     = ""
-}
-
-variable "allowed_nodeport_cidr" {
-  description = "CIDR block allowed to access Kubernetes NodePort services (30000-32767). If empty, defaults to allowed_admin_cidr."
-  type        = string
-  default     = ""
+  default     = "0.0.0.0/0"
 }

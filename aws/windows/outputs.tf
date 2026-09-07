@@ -8,14 +8,9 @@ output "private_ip" {
   value       = module.windows_node.first_private_ip
 }
 
-output "rdp_allowed_ip" {
-  description = "Public IP / CIDR currently allowed to RDP and WinRM"
-  value       = local.admin_cidr
-}
-
-output "allowed_admin_cidr" {
-  description = "CIDR block currently authorized for administrative access"
-  value       = local.admin_cidr
+output "allowed_cidr" {
+  description = "CIDR block authorized for RDP and WinRM access"
+  value       = var.allowed_cidr
 }
 
 output "instance_id" {

@@ -7,4 +7,4 @@ cidr_block        = "10.123.0.0/16"
 subnet_ip         = "10.123.1.0/24"
 public_key_path   = "~/.ssh/windows_aws.pub"
 private_key_path  = "~/.ssh/windows_aws"
-# allowed_admin_cidr = "203.0.113.10/32" # Optional override (for RDP and WinRM); auto-detected if omitted
+# allowed_cidr     = "0.0.0.0/0" # Default allows RDP and WinRM from anywhere; override if restricted CIDR is needed
