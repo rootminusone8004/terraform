@@ -25,6 +25,7 @@ variable "username" {
 variable "os_id" {
   description = "Vultr Debian OS ID"
   type        = number
+  default     = 2625
 }
 
 variable "ssh_public_key" {

@@ -25,6 +25,7 @@ variable "username" {
 variable "os_id" {
   description = "Vultr OpenBSD OS ID"
   type        = number
+  default     = 2772
 }
 
 variable "ssh_public_key" {
