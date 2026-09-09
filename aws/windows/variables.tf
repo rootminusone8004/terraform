@@ -38,7 +38,6 @@ variable "admin_password" {
   description = "Administrator password for the Windows Server"
   type        = string
   sensitive   = true
-  default     = "ChangeMeStrongPassword123!"
 }
 
 variable "allowed_cidr" {
