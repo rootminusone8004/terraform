@@ -51,9 +51,9 @@ module "security_group" {
       cidr_blocks = [var.allowed_cidr]
     },
     {
-      description = "WinRM HTTPS"
-      from_port   = 2201
-      to_port     = 2210
+      description = "Student Container SSH"
+      from_port   = 22001
+      to_port     = 22025
       protocol    = "tcp"
       cidr_blocks = [var.allowed_cidr]
     }
