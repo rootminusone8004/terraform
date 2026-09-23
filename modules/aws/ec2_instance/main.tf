@@ -58,4 +58,9 @@ resource "aws_instance" "this" {
     )
     interpreter = ["bash", "-c"]
   }
+
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm -f env"
+  }
 }
