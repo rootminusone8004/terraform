@@ -11,6 +11,5 @@ module "bsd_server" {
   username                = var.username
   tags                    = ["terraform", "openbsd"]
   bootstrap_template_path = "${path.module}/scripts/bootstrap.sh.tpl"
-  ssh_config_alias        = "openbsd-vultr"
   forward_x11             = true
 }

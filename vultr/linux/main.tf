@@ -11,6 +11,5 @@ module "linux_server" {
   username                = var.username
   tags                    = ["terraform", "debian"]
   bootstrap_template_path = "${path.module}/scripts/bootstrap.sh.tpl"
-  ssh_config_alias        = "debian-vultr"
   forward_x11             = true
 }

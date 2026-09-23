@@ -53,7 +53,7 @@ resource "vultr_instance" "this" {
       %{if var.enable_ssh_config}
       mkdir -p ~/.ssh && chmod 700 ~/.ssh
       {
-        printf 'Host %s\n' '${var.ssh_config_alias != "" ? var.ssh_config_alias : self.main_ip}'
+        printf 'Host %s\n' '${self.main_ip}'
         printf '  Hostname %s\n' '${self.main_ip}'
         printf '  User %s\n' '${var.username}'
         %{if var.forward_x11}
@@ -65,9 +65,6 @@ resource "vultr_instance" "this" {
       %{endif}
       %{if var.enable_env_file}
       rm -f env && touch env
-      if [ -f ~/.vultr/env ]; then
-        cat ~/.vultr/env >> env
-      fi
       {
         printf 'usr=%s\n' '${var.username}'
         printf 'IP=%s\n' '${self.main_ip}'
