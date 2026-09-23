@@ -10,6 +10,7 @@ crash.log
 .env
 env
 *.bak
+key_env
 
 # Local directories
 .terraform/
